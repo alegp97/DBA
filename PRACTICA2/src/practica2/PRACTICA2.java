@@ -4,44 +4,55 @@
  */
 package practica2;
 
-import jade.core.Agent;
-import java.util.Iterator;
+import jade.core.Profile;
+import jade.core.ProfileImpl;
+import jade.wrapper.AgentController;
+import jade.wrapper.ContainerController;
+import jade.wrapper.StaleProxyException;
+import java.io.IOException;
 
 /**
  *
  * @author alegp
  */
-public class PRACTICA2 extends Agent{
+public class PRACTICA2{
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
-    }
-    
-    
-    @Override
-    protected void setup() {
-            System.out.println("HOLA! Soy el agente de practica2");
-            
-            System.out.println("My local-name is " + getAID().getLocalName());
-            System.out.println("My GUID is " + getAID().getName());
-            System.out.println("My addresses are: ");
-            
-            
-            Iterator  it = getAID().getAllAddresses();
-            while ( it.hasNext()) {
-                System.out.println("-" + it.next());
+        System.out.println("Empezando main ");
+        jade.core.Runtime rt = jade.core.Runtime.instance();
+        Profile p = new ProfileImpl();
+        p.setParameter(Profile.MAIN_HOST, "localhost"); // Cambia a tu dirección de host si es diferente
+        p.setParameter(Profile.CONTAINER_NAME, "Contenedor1"); // Puerto predeterminado de JADE
+
+        
+        
+        
+        Level level = new Level("C:\\Users\\alegp\\OneDrive\\Escritorio\\DBA\\Practicas\\P2\\DBA\\PRACTICA2\\Mapas\\MapaConvexo.txt");
+  
+        int[][] map = level.getMap();
+        // Imprimir el mapa
+        for (int i = 0; i < level.getFilas(); i++) {
+            for (int j = 0; j < level.getColumnas(); j++) {
+                System.out.print(map[i][j] + " ");
             }
-            
-            doDelete();
+            System.out.println();
+        }
+        
+        
+        
+        ContainerController cc = rt.createAgentContainer(p);
+        try {
+            AgentController ac = cc.createNewAgent("PRACTICA2", Agente.class.getCanonicalName(), null);
+                ac.start();
+            }catch (StaleProxyException ex) {
+            }
     }
     
-    @Override
-    public void takeDown() {
-        System.out.println("Terminating agent...");
-    }
     
+
     
 }
